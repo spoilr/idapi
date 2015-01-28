@@ -12,7 +12,9 @@ def Prior(theData, root, noStates):
 # Coursework 1 task 1 should be inserted here
     rootStates = noStates[root]
     rootValues = theData[:,root]
-    prior = numpy.bincount(rootValues) # The states are numbered consecutively from 0 upwards
+    occurences = numpy.bincount(rootValues) # The states are numbered consecutively from 0 upwards
+    occTotal = sum(occurences)
+    prior = array([float(x) / occTotal for x in occurences])
 # end of Coursework 1 task 1
     return prior
 # Function to compute a CPT with parent node varP and xchild node varC from the data array
@@ -20,32 +22,30 @@ def Prior(theData, root, noStates):
 def CPT(theData, varC, varP, noStates):
     cPT = zeros((noStates[varC], noStates[varP]), float )
 # Coursework 1 task 2 should be inserted here
-    data = theData
-    CValues = data[:,varC]
-    PValues = data[:,varP]
+    CValues = theData[:,varC]
+    PValues = theData[:,varP]
     CStates = noStates[varC]
     PStates = noStates[varP]
-    COcc = numpy.bincount(CValues)
+    COcc = numpy.bincount(PValues)
     for i in range(CStates):
         for j in range(PStates):
-            coOcc = len([x for x in range(CStates) if CValues[x] == i and PValues[x] == j])
-            cPT[i][j] = float(coOcc) / COcc[j]
+            joint = len(['a' for k in range(len(theData)) if CValues[k] == i and PValues[k] == j])
+            cPT[i][j] = float(joint) / COcc[j]
 # end of coursework 1 task 2
     return cPT
 # Function to calculate the joint probability table of two variables in the data set
 def JPT(theData, varRow, varCol, noStates):
     jPT = zeros((noStates[varRow], noStates[varCol]), float )
 #Coursework 1 task 3 should be inserted here 
-    data = theData
-    rowValues = data[:,varRow]
-    colValues = data[:,varCol]
+    rowValues = theData[:,varRow]
+    colValues = theData[:,varCol]
     dataPoints = len(theData)
     rowStates = noStates[varRow]
     colStates = noStates[varCol]
     for i in range(rowStates):
         for j in range(colStates):
-            coOcc = len([x for x in range(rowStates) if rowValues[x] == i and colValues[x] == j])
-            jPT[i][j] = float(coOcc) / dataPoints
+            joint = len([x for x in range(len(theData)) if rowValues[x] == i and colValues[x] == j])
+            jPT[i][j] = float(joint) / dataPoints
 # end of coursework 1 task 3
     return jPT
 #
@@ -220,7 +220,7 @@ def PrincipalComponents(theData):
 #
 noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("Neurones.txt")
 theData = array(datain)
-AppendString("results.txt","Coursework One Results by dfg")
+AppendString("results.txt","Coursework One Results by oc511")
 AppendString("results.txt","") #blank line
 AppendString("results.txt","The prior probability of node 0")
 prior = Prior(theData, 0, noStates)
@@ -230,14 +230,14 @@ AppendList("results.txt", prior)
 #
 #
 
-prior = Prior(theData, 0, noStates)
-print prior
-
+AppendString("results.txt","The conditional probability matrix P (2|0) calculated from the data")
 cPT = CPT(theData, 2, 0, noStates)
-print cPT
+AppendArray("results.txt", cPT)
 
+AppendString("results.txt","The joint probability matrix P (2&0) calculated from the data")
 jPT = JPT(theData, 2, 0, noStates)
-print jPT
+AppendArray("results.txt", jPT)
 
+AppendString("results.txt","The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
 convertedCPt = JPT2CPT(jPT)
-print convertedCPt
+AppendArray("results.txt", convertedCPt)
