@@ -11,7 +11,7 @@ def Prior(theData, root, noStates):
     prior = zeros((noStates[root]), float )
 # Coursework 1 task 1 should be inserted here
     rootStates = noStates[root]
-    rootValues = numpy.array(theData)[:,root]
+    rootValues = theData[:,root]
     prior = numpy.bincount(rootValues) # The states are numbered consecutively from 0 upwards
 # end of Coursework 1 task 1
     return prior
@@ -20,7 +20,7 @@ def Prior(theData, root, noStates):
 def CPT(theData, varC, varP, noStates):
     cPT = zeros((noStates[varC], noStates[varP]), float )
 # Coursework 1 task 2 should be inserted here
-    data = numpy.array(theData)
+    data = theData
     CValues = data[:,varC]
     PValues = data[:,varP]
     CStates = noStates[varC]
@@ -36,14 +36,22 @@ def CPT(theData, varC, varP, noStates):
 def JPT(theData, varRow, varCol, noStates):
     jPT = zeros((noStates[varRow], noStates[varCol]), float )
 #Coursework 1 task 3 should be inserted here 
-    
+    data = theData
+    rowValues = data[:,varRow]
+    colValues = data[:,varCol]
+    dataPoints = len(theData)
+    rowStates = noStates[varRow]
+    colStates = noStates[varCol]
+    for i in range(rowStates):
+        for j in range(colStates):
+            coOcc = len([x for x in range(rowStates) if rowValues[x] == i and colValues[x] == j])
+            jPT[i][j] = float(coOcc) / dataPoints
 # end of coursework 1 task 3
     return jPT
 #
 # Function to convert a joint probability table to a conditional probability table
 def JPT2CPT(aJPT):
 #Coursework 1 task 4 should be inserted here 
-   
 # coursework 1 taks 4 ends here
     return aJPT
 
@@ -228,3 +236,8 @@ print prior
 cPT = CPT(theData, 2, 0, noStates)
 print cPT
 
+jPT = JPT(theData, 2, 0, noStates)
+print jPT
+
+convertedCPt = JPT2CPT(jPT)
+print convertedCPt
