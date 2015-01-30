@@ -65,8 +65,12 @@ def JPT2CPT(aJPT):
 def Query(theQuery, naiveBayes): 
     rootPdf = zeros((naiveBayes[0].shape[0]), float)
 # Coursework 1 task 5 should be inserted here
-  
-
+    evidence = 1
+    for i in range(len(theQuery)):
+        evidence *= naiveBayes[i+1][theQuery[i],:]
+    rootPdf = transpose(naiveBayes[0]) * evidence
+    alpha = float(1) / sum(rootPdf)    
+    rootPdf = array([alpha * x for x in rootPdf])
 # end of coursework 1 task 5
     return rootPdf
 #
@@ -220,6 +224,17 @@ def PrincipalComponents(theData):
     # Coursework 4 task 6 ends here
     return array(orthoPhi)
 
+
+def createNetwork(theData, noVariables, noRoots, noStates):
+    naiveBayes = []
+    for i in range(noRoots):
+        naiveBayes.append(Prior(theData, i, noStates))
+    noNonRoots = noVariables - noRoots    
+    for i in range(noNonRoots):
+        var = i + noRoots
+        naiveBayes.append(CPT(theData, var, 0, noStates))
+    return array(naiveBayes)
+
 #
 # main program part for Coursework 1
 #
@@ -246,3 +261,14 @@ AppendArray("results.txt", jPT)
 AppendString("results.txt","The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
 convertedCPt = JPT2CPT(jPT)
 AppendArray("results.txt", convertedCPt)
+
+
+naiveBayes = createNetwork(theData, noVariables, noRoots, noStates)
+
+AppendString("results.txt","The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network")
+AppendString("results.txt","The results of [4,0,0,0,5] on the naive network")
+query = Query([4,0,0,0,5], naiveBayes)
+AppendList("results.txt", query)
+AppendString("results.txt","The results of [6, 5, 2, 5, 5] on the naive network")
+query = Query([6, 5, 2, 5, 5], naiveBayes)
+AppendList("results.txt", query)
