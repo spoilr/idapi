@@ -240,35 +240,35 @@ def createNetwork(theData, noVariables, noRoots, noStates):
 #
 noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("Neurones.txt")
 theData = array(datain)
-AppendString("results.txt","Coursework One Results by oc511")
-AppendString("results.txt","") #blank line
-AppendString("results.txt","The prior probability of node 0")
+AppendString("IDAPIResults01.txt","Coursework One Results by oc511")
+AppendString("IDAPIResults01.txt","") #blank line
+AppendString("IDAPIResults01.txt","The prior probability of node 0")
 prior = Prior(theData, 0, noStates)
-AppendList("results.txt", prior)
+AppendList("IDAPIResults01.txt", prior)
 #
 # continue as described
 #
 #
 
-AppendString("results.txt","The conditional probability matrix P (2|0) calculated from the data")
+AppendString("IDAPIResults01.txt","The conditional probability matrix P (2|0) calculated from the data")
 cPT = CPT(theData, 2, 0, noStates)
-AppendArray("results.txt", cPT)
+AppendArray("IDAPIResults01.txt", cPT)
 
-AppendString("results.txt","The joint probability matrix P (2&0) calculated from the data")
+AppendString("IDAPIResults01.txt","The joint probability matrix P (2&0) calculated from the data")
 jPT = JPT(theData, 2, 0, noStates)
-AppendArray("results.txt", jPT)
+AppendArray("IDAPIResults01.txt", jPT)
 
-AppendString("results.txt","The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
+AppendString("IDAPIResults01.txt","The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
 convertedCPt = JPT2CPT(jPT)
-AppendArray("results.txt", convertedCPt)
+AppendArray("IDAPIResults01.txt", convertedCPt)
 
 
 naiveBayes = createNetwork(theData, noVariables, noRoots, noStates)
 
-AppendString("results.txt","The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network")
-AppendString("results.txt","The results of [4,0,0,0,5] on the naive network")
+AppendString("IDAPIResults01.txt","The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network")
+AppendString("IDAPIResults01.txt","The results of [4,0,0,0,5] on the naive network")
 query = Query([4,0,0,0,5], naiveBayes)
-AppendList("results.txt", query)
-AppendString("results.txt","The results of [6, 5, 2, 5, 5] on the naive network")
+AppendList("IDAPIResults01.txt", query)
+AppendString("IDAPIResults01.txt","The results of [6, 5, 2, 5, 5] on the naive network")
 query = Query([6, 5, 2, 5, 5], naiveBayes)
-AppendList("results.txt", query)
+AppendList("IDAPIResults01.txt", query)
