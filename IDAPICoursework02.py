@@ -262,3 +262,7 @@ AppendArray("IDAPIResults02.txt", depMatrix)
 AppendString("IDAPIResults02.txt","3 - The dependency list for the HepatitisC data set")
 depList = DependencyList(depMatrix)
 AppendArray("IDAPIResults02.txt", depList)
+
+AppendString("IDAPIResults02.txt","4 - The spanning tree found for the HepatitisC data set")
+tree = SpanningTreeAlgorithm(depList, noVariables)
+AppendArray("IDAPIResults02.txt", tree)
