@@ -11,11 +11,10 @@ import math
 def Prior(theData, root, noStates):
     prior = zeros((noStates[root]), float )
 # Coursework 1 task 1 should be inserted here
-    rootStates = noStates[root]
     rootValues = theData[:,root]
     occurences = numpy.bincount(rootValues) # The states are numbered consecutively from 0 upwards
     occTotal = sum(occurences)
-    prior = array([float(x) / occTotal for x in occurences])
+    prior = array(occurences, float) / occTotal
 # end of Coursework 1 task 1
     return prior
 # Function to compute a CPT with parent node varP and xchild node varC from the data array
@@ -30,7 +29,7 @@ def CPT(theData, varC, varP, noStates):
     COcc = numpy.bincount(PValues)
     for i in range(CStates):
         for j in range(PStates):
-            joint = len(['a' for k in range(len(theData)) if CValues[k] == i and PValues[k] == j])
+            joint = len([k for k in range(len(theData)) if CValues[k] == i and PValues[k] == j])
             cPT[i][j] = float(joint) / COcc[j]
 # end of coursework 1 task 2
     return cPT
@@ -57,7 +56,7 @@ def JPT2CPT(aJPT):
     for i in range(cols):
         currentCol = aJPT[:, i]
         alpha = float(1) / sum(currentCol)
-        aJPT[:, i] = [alpha * x for x in currentCol]
+        aJPT[:, i] = alpha * currentCol
 # coursework 1 taks 4 ends here
     return aJPT
 
@@ -71,7 +70,7 @@ def Query(theQuery, naiveBayes):
         evidence *= naiveBayes[i+1][theQuery[i],:]
     rootPdf = transpose(naiveBayes[0]) * evidence
     alpha = float(1) / sum(rootPdf)    
-    rootPdf = array([alpha * x for x in rootPdf])
+    rootPdf = alpha * rootPdf
 # end of coursework 1 task 5
     return rootPdf
 #
@@ -113,8 +112,8 @@ def DependencyList(depMatrix):
     for i in range(numRows):
         for j in range(i+1, numCols):
             if i != j:
-                depList.append((depMatrix[i][j], i, j))
-    depList2 = sorted(depList, key=lambda x: x[0])        
+                depList.append([depMatrix[i][j], i, j])
+    depList2 = sorted(depList, key=lambda x: x[0], reverse=True)        
 # end of coursework 2 task 3
     return array(depList2)
 #
@@ -250,16 +249,16 @@ def createNetwork(theData, noVariables, noRoots, noStates):
     return array(naiveBayes)
 
 #
-# main program part for Coursework 1
+# main program part for Coursework 2
 #
 noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("HepatitisC.txt")
 theData = array(datain)
-AppendString("IDAPIResults02.txt","Coursework Two Results by oc511")
+AppendString("IDAPIResults02.txt","1 - Coursework Two Results by oc511")
 
-AppendString("IDAPIResults02.txt","The dependency matrix for the HepatitisC data set")
+AppendString("IDAPIResults02.txt","2 - The dependency matrix for the HepatitisC data set")
 depMatrix = DependencyMatrix(theData, noVariables, noStates)
 AppendArray("IDAPIResults02.txt", depMatrix)
 
-AppendString("IDAPIResults02.txt","The dependency list for the HepatitisC data set")
+AppendString("IDAPIResults02.txt","3 - The dependency list for the HepatitisC data set")
 depList = DependencyList(depMatrix)
 AppendArray("IDAPIResults02.txt", depList)
