@@ -1,9 +1,9 @@
-Coursework One Results by oc511
+1 - Coursework One Results by oc511
 
-The prior probability of node 0
+2 - The prior probability of node 0
  0.159  0.295  0.205  0.341 
 
-The conditional probability matrix P (2|0) calculated from the data
+3 - The conditional probability matrix P (2|0) calculated from the data
  0.571  0.231  0.000  0.000 
  0.286  0.231  0.000  0.000 
  0.143  0.000  0.000  0.000 
@@ -14,7 +14,7 @@ The conditional probability matrix P (2|0) calculated from the data
  0.000  0.000  0.000  0.333 
 
 
-The joint probability matrix P (2&0) calculated from the data
+4 - The joint probability matrix P (2&0) calculated from the data
  0.091  0.068  0.000  0.000 
  0.045  0.068  0.000  0.000 
  0.023  0.000  0.000  0.000 
@@ -25,7 +25,7 @@ The joint probability matrix P (2&0) calculated from the data
  0.000  0.000  0.000  0.114 
 
 
-The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)
+5 - The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)
  0.571  0.231  0.000  0.000 
  0.286  0.231  0.000  0.000 
  0.143  0.000  0.000  0.000 
@@ -36,7 +36,7 @@ The conditional probability matrix P (2|0) calculated from the joint probability
  0.000  0.000  0.000  0.333 
 
 
-The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network
+6 - The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network
 The results of [4,0,0,0,5] on the naive network
  0.982  0.018  0.000  0.000 
 

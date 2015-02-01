@@ -10,11 +10,10 @@ from numpy import *
 def Prior(theData, root, noStates):
     prior = zeros((noStates[root]), float )
 # Coursework 1 task 1 should be inserted here
-    rootStates = noStates[root]
     rootValues = theData[:,root]
     occurences = numpy.bincount(rootValues) # The states are numbered consecutively from 0 upwards
     occTotal = sum(occurences)
-    prior = array([float(x) / occTotal for x in occurences])
+    prior = array(occurences, float) / occTotal
 # end of Coursework 1 task 1
     return prior
 # Function to compute a CPT with parent node varP and xchild node varC from the data array
@@ -29,7 +28,7 @@ def CPT(theData, varC, varP, noStates):
     COcc = numpy.bincount(PValues)
     for i in range(CStates):
         for j in range(PStates):
-            joint = len(['a' for k in range(len(theData)) if CValues[k] == i and PValues[k] == j])
+            joint = len([k for k in range(len(theData)) if CValues[k] == i and PValues[k] == j])
             cPT[i][j] = float(joint) / COcc[j]
 # end of coursework 1 task 2
     return cPT
@@ -56,7 +55,7 @@ def JPT2CPT(aJPT):
     for i in range(cols):
         currentCol = aJPT[:, i]
         alpha = float(1) / sum(currentCol)
-        aJPT[:, i] = [alpha * x for x in currentCol]
+        aJPT[:, i] = alpha * currentCol
 # coursework 1 taks 4 ends here
     return aJPT
 
@@ -70,7 +69,7 @@ def Query(theQuery, naiveBayes):
         evidence *= naiveBayes[i+1][theQuery[i],:]
     rootPdf = transpose(naiveBayes[0]) * evidence
     alpha = float(1) / sum(rootPdf)    
-    rootPdf = array([alpha * x for x in rootPdf])
+    rootPdf = alpha * rootPdf
 # end of coursework 1 task 5
     return rootPdf
 #
@@ -240,9 +239,9 @@ def createNetwork(theData, noVariables, noRoots, noStates):
 #
 noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("Neurones.txt")
 theData = array(datain)
-AppendString("IDAPIResults01.txt","Coursework One Results by oc511")
+AppendString("IDAPIResults01.txt","1 - Coursework One Results by oc511")
 AppendString("IDAPIResults01.txt","") #blank line
-AppendString("IDAPIResults01.txt","The prior probability of node 0")
+AppendString("IDAPIResults01.txt","2 - The prior probability of node 0")
 prior = Prior(theData, 0, noStates)
 AppendList("IDAPIResults01.txt", prior)
 #
@@ -250,22 +249,22 @@ AppendList("IDAPIResults01.txt", prior)
 #
 #
 
-AppendString("IDAPIResults01.txt","The conditional probability matrix P (2|0) calculated from the data")
+AppendString("IDAPIResults01.txt","3 - The conditional probability matrix P (2|0) calculated from the data")
 cPT = CPT(theData, 2, 0, noStates)
 AppendArray("IDAPIResults01.txt", cPT)
 
-AppendString("IDAPIResults01.txt","The joint probability matrix P (2&0) calculated from the data")
+AppendString("IDAPIResults01.txt","4 - The joint probability matrix P (2&0) calculated from the data")
 jPT = JPT(theData, 2, 0, noStates)
 AppendArray("IDAPIResults01.txt", jPT)
 
-AppendString("IDAPIResults01.txt","The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
+AppendString("IDAPIResults01.txt","5 - The conditional probability matrix P (2|0) calculated from the joint probability matrix P (2&0)")
 convertedCPt = JPT2CPT(jPT)
 AppendArray("IDAPIResults01.txt", convertedCPt)
 
 
 naiveBayes = createNetwork(theData, noVariables, noRoots, noStates)
 
-AppendString("IDAPIResults01.txt","The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network")
+AppendString("IDAPIResults01.txt","6 - The results of queries [4,0,0,0,5] and [6, 5, 2, 5, 5] on the naive network")
 AppendString("IDAPIResults01.txt","The results of [4,0,0,0,5] on the naive network")
 query = Query([4,0,0,0,5], naiveBayes)
 AppendList("IDAPIResults01.txt", query)
