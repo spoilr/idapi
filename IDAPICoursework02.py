@@ -108,8 +108,13 @@ def DependencyMatrix(theData, noVariables, noStates):
 def DependencyList(depMatrix):
     depList=[]
 # Coursework 2 task 3 should be inserted here
-    
-
+    numRows = depMatrix.shape[0]
+    numCols = depMatrix.shape[1]
+    for i in range(numRows):
+        for j in range(i+1, numCols):
+            if i != j:
+                depList.append((depMatrix[i][j], i, j))
+    depList2 = sorted(depList, key=lambda x: x[0])        
 # end of coursework 2 task 3
     return array(depList2)
 #
@@ -252,6 +257,9 @@ theData = array(datain)
 AppendString("IDAPIResults02.txt","Coursework Two Results by oc511")
 
 AppendString("IDAPIResults02.txt","The dependency matrix for the HepatitisC data set")
-
 depMatrix = DependencyMatrix(theData, noVariables, noStates)
 AppendArray("IDAPIResults02.txt", depMatrix)
+
+AppendString("IDAPIResults02.txt","The dependency list for the HepatitisC data set")
+depList = DependencyList(depMatrix)
+AppendArray("IDAPIResults02.txt", depList)
