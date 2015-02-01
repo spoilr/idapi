@@ -98,8 +98,10 @@ def MutualInformation(jP):
 def DependencyMatrix(theData, noVariables, noStates):
     MIMatrix = zeros((noVariables,noVariables))
 # Coursework 2 task 2 should be inserted here
-    
-
+    for i in range(noVariables):
+        for j in range(noVariables):
+            jpt = JPT(theData, i, j, noStates)        
+            MIMatrix[i][j] = MutualInformation(jpt)
 # end of coursework 2 task 2
     return MIMatrix
 # Function to compute an ordered list of dependencies 
@@ -249,3 +251,7 @@ noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("HepatitisC.txt"
 theData = array(datain)
 AppendString("IDAPIResults02.txt","Coursework Two Results by oc511")
 
+AppendString("IDAPIResults02.txt","The dependency matrix for the HepatitisC data set")
+
+depMatrix = DependencyMatrix(theData, noVariables, noStates)
+AppendArray("IDAPIResults02.txt", depMatrix)
