@@ -120,9 +120,33 @@ def DependencyList(depMatrix):
 # Functions implementing the spanning tree algorithm
 # Coursework 2 task 4
 
+def isPath(adjList, node1, node2, visited=[]):
+    visited = visited + [node1]
+    if node1 == node2:
+        return True
+    for node in adjList[node1]:
+        if node not in visited:
+            path = isPath(adjList, node, node2, visited)
+            if path:
+                return path
+    return False    
+
+def adjacencyList(noVariables):
+    adjList = dict()
+    for i in range(noVariables):
+        adjList[i] = []
+    return adjList     
+
 def SpanningTreeAlgorithm(depList, noVariables):
     spanningTree = []
-  
+    adjList = adjacencyList(noVariables)
+    for x in depList:
+        node1 = x[1]
+        node2 = x[2]
+        if not isPath(adjList, node1, node2):
+            adjList[node1].append(node2)
+            adjList[node2].append(node1)
+            spanningTree.append([x[0], node1, node2])
     return array(spanningTree)
 #
 # End of coursework 2
