@@ -225,8 +225,18 @@ def MDLSize(arcList, cptList, noDataPoints, noStates):
 def JointProbability(dataPoint, arcList, cptList):
     jP = 1.0
 # Coursework 3 task 4 begins here
-
-
+    for nodeArcs in arcList:
+        currentNode = nodeArcs[0]
+        currentCpt = cptList[currentNode]
+        firstNode = dataPoint[currentNode]
+        if len(nodeArcs) == 1:
+            jP *= currentCpt[firstNode]
+        else:    
+            parents = nodeArcs[1:]
+            if len(parents) == 1:
+                jP *= currentCpt[firstNode][dataPoint[parents[0]]]
+            else:
+                jP *= currentCpt[firstNode][dataPoint[parents[0]]][dataPoint[parents[1]]]
 # Coursework 3 task 4 ends here 
     return jP
 #
@@ -234,14 +244,16 @@ def JointProbability(dataPoint, arcList, cptList):
 def MDLAccuracy(theData, arcList, cptList):
     mdlAccuracy=0
 # Coursework 3 task 5 begins here
-
-
+    for dataPoint in theData:
+        jp = JointProbability(dataPoint, arcList, cptList)
+        mdlAccuracy += math.log(jp, 2)
 # Coursework 3 task 5 ends here 
     return mdlAccuracy
+
 #
-# End of coursework 2
+# End of coursework 3
 #
-# Coursework 3 begins here
+# Coursework 4 begins here
 #
 def Mean(theData):
     realData = theData.astype(float)
@@ -307,7 +319,7 @@ def createNetwork(theData, noVariables, noRoots, noStates):
     return array(naiveBayes)
 
 #
-# main program part for Coursework 2
+# main program part for Coursework 3
 #
 noVariables, noRoots, noStates, noDataPoints, datain = ReadFile("HepatitisC.txt")
 theData = array(datain)
@@ -316,9 +328,10 @@ AppendString("IDAPIResults03.txt","1 - Coursework Three Results by oc511")
 arcList, cptList = HepatitisCNetwork(theData, noStates)
 mdlSize = MDLSize(arcList, cptList, noDataPoints, noStates)
 AppendString("IDAPIResults03.txt","2 - The MDLSize of the network for Hepatitis C data set: %f" % mdlSize)
+mdlAccuracy = MDLAccuracy(theData, arcList, cptList)
+AppendString("IDAPIResults03.txt","3 - The MDLAccuracy of the your network for Hepatitis C data set: %f" % mdlAccuracy)
+mdlScore = mdlSize - mdlAccuracy
+AppendString("IDAPIResults03.txt","3 - The MDLScore of the your network for Hepatitis C data set: %f" % mdlScore)
 
 
-
-# 3. The MDLAccuracy of the your network for Hepatitis C data set 
-# 4. The MDLScore of the your network for Hepatitis C data set
 # 5. The score of your best network with one arc removed
