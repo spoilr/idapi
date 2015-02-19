@@ -202,6 +202,10 @@ def HepatitisCNetwork(theData, noStates):
     cptList.append(CPT(theData, 6, 1, noStates))
     cptList.append(CPT_2(theData, 7, 0, 1, noStates))
     cptList.append(CPT(theData, 8, 7, noStates))
+
+    # or instead of Example, use the function defined for BestNetworkScoreRemovingOneArc
+    # cptList = cptsFromArcs(theData, arcList, noStates)
+
     return arcList, cptList
 # end of coursework 3 task 2
 #
@@ -262,16 +266,17 @@ def BestNetworkScoreRemovingOneArc(theData, arcList, cptList, noDataPoints, noSt
             parents = nodeArcs[1:]
             for p in parents:
                 newParents = deepcopy(parents)
-                newParents.remove(p)
+                newParents.remove(p) # remove one of the parents
                 newArcs = deepcopy(arcList)
-                newArcs[index] = [nodeArcs[0]] + newParents
-                newCpts = cptListFromArcList(theData, newArcs, noStates)
+                # create new arcs obtained from the initial ones with one of the parent removed
+                newArcs[index] = [nodeArcs[0]] + newParents 
+                newCpts = cptsFromArcs(theData, newArcs, noStates)
             score = MDLScore(theData, newArcs, newCpts, noDataPoints, noStates)    
             nets.append((newArcs, score))    
             arcsRemoved.append(([nodeArcs[0], p], score))        
     return min(nets, key=lambda x: x[1])
 
-def cptListFromArcList(theData, arcList, noStates):
+def cptsFromArcs(theData, arcList, noStates):
     cptList = []
     for arcs in arcList:
         if len(arcs) == 1:
