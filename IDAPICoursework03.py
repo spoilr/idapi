@@ -3,6 +3,7 @@
 # Coursework in Python 
 from IDAPICourseworkLibrary import *
 from numpy import *
+from copy import deepcopy
 import math
 #
 # Coursework 1 begins here
@@ -250,6 +251,37 @@ def MDLAccuracy(theData, arcList, cptList):
 # Coursework 3 task 5 ends here 
     return mdlAccuracy
 
+def MDLScore(theData, arcList, cptList, noDataPoints, noStates):
+    return MDLSize(arcList, cptList, noDataPoints, noStates) - MDLAccuracy(theData, arcList, cptList)
+
+def BestNetworkScoreRemovingOneArc(theData, arcList, cptList, noDataPoints, noStates):
+    nets = []
+    arcsRemoved = []
+    for index, nodeArcs in enumerate(arcList):
+        if len(nodeArcs) > 1:
+            parents = nodeArcs[1:]
+            for p in parents:
+                newParents = deepcopy(parents)
+                newParents.remove(p)
+                newArcs = deepcopy(arcList)
+                newArcs[index] = [nodeArcs[0]] + newParents
+                newCpts = cptListFromArcList(theData, newArcs, noStates)
+            score = MDLScore(theData, newArcs, newCpts, noDataPoints, noStates)    
+            nets.append((newArcs, score))    
+            arcsRemoved.append(([nodeArcs[0], p], score))        
+    return min(nets, key=lambda x: x[1])
+
+def cptListFromArcList(theData, arcList, noStates):
+    cptList = []
+    for arcs in arcList:
+        if len(arcs) == 1:
+            cptList.append(Prior(theData, arcs[0], noStates))
+        if len(arcs) == 2:
+            cptList.append(CPT(theData, arcs[0], arcs[1], noStates))
+        if len(arcs) == 3:    
+            cptList.append(CPT_2(theData, arcs[0], arcs[1], arcs[2], noStates))
+    return cptList
+
 #
 # End of coursework 3
 #
@@ -329,9 +361,9 @@ arcList, cptList = HepatitisCNetwork(theData, noStates)
 mdlSize = MDLSize(arcList, cptList, noDataPoints, noStates)
 AppendString("IDAPIResults03.txt","2 - The MDLSize of the network for Hepatitis C data set: %f" % mdlSize)
 mdlAccuracy = MDLAccuracy(theData, arcList, cptList)
-AppendString("IDAPIResults03.txt","3 - The MDLAccuracy of the your network for Hepatitis C data set: %f" % mdlAccuracy)
-mdlScore = mdlSize - mdlAccuracy
-AppendString("IDAPIResults03.txt","3 - The MDLScore of the your network for Hepatitis C data set: %f" % mdlScore)
-
-
-# 5. The score of your best network with one arc removed
+AppendString("IDAPIResults03.txt","3 - The MDLAccuracy of the network for Hepatitis C data set: %f" % mdlAccuracy)
+mdlScore = MDLScore(theData, arcList, cptList, noDataPoints, noStates)
+AppendString("IDAPIResults03.txt","4 - The MDLScore of the network for Hepatitis C data set: %f" % mdlScore)
+bestNetwork, bestNetworkScore = BestNetworkScoreRemovingOneArc(theData, arcList, cptList, noDataPoints, noStates)
+AppendString("IDAPIResults03.txt","5 - The score of the best network with one arc removed: %f" % bestNetworkScore)
+AppendString("IDAPIResults03.txt","5 - The best network with one arc removed %s" % bestNetwork)

@@ -1,0 +1,6 @@
+1 - Coursework Three Results by oc511
+2 - The MDLSize of the network for Hepatitis C data set: 3972.430238
+3 - The MDLAccuracy of the network for Hepatitis C data set: -23672.181027
+4 - The MDLScore of the network for Hepatitis C data set: 27644.611265
+5 - The score of the best network with one arc removed: 25916.701682
+5 - The best network with one arc removed [[0], [1], [2, 0], [3, 4], [4, 1], [5, 4], [6, 1], [7, 0], [8, 7]]
