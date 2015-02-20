@@ -173,7 +173,7 @@ def CPT_2(theData, child, parent1, parent2, noStates):
                     cPT[k][i][j] /= occ
             else:
                 # if a parent combination never occurs, then children cases have equal prob
-                cPT[k][i][j] /= noStates[child]
+                cPT[k][i][j] = 1 / noStates[child]
 # End of Coursework 3 task 1           
     return cPT
 #
