@@ -315,15 +315,17 @@ def Covariance(theData):
     # Coursework 4 task 2 ends here
     return covar
 def CreateEigenfaceFiles(theBasis):
-    adummystatement = 0 #delete this when you do the coursework
     # Coursework 4 task 3 begins here
-
+    for j in range(len(theBasis)):
+        filename = "PrincipalComponent" + str(j) + ".jpg"
+        SaveEigenface(theBasis[j], filename)
     # Coursework 4 task 3 ends here
 
 def ProjectFace(theBasis, theMean, theFaceImage):
     magnitudes = []
     # Coursework 4 task 4 begins here
-
+    image = array(ReadOneImage(theFaceImage))
+    magnitudes = dot(subtract(image, theMean), theBasis.transpose())
     # Coursework 4 task 4 ends here
     return array(magnitudes)
 
@@ -335,7 +337,7 @@ def CreatePartialReconstructions(aBasis, aMean, componentMags):
 
 def PrincipalComponents(theData):
     orthoPhi = []
-    # Coursework 4 task 3 begins here
+    # Coursework 4 task 6 begins here
     # The first part is almost identical to the above Covariance function, but because the
     # data has so many variables you need to use the Kohonen Lowe method described in lecture 15
     # The output should be a list of the principal components normalised and sorted in descending 
@@ -344,17 +346,6 @@ def PrincipalComponents(theData):
     
     # Coursework 4 task 6 ends here
     return array(orthoPhi)
-
-
-def createNetwork(theData, noVariables, noRoots, noStates):
-    naiveBayes = []
-    for i in range(noRoots):
-        naiveBayes.append(Prior(theData, i, noStates))
-    noNonRoots = noVariables - noRoots    
-    for i in range(noNonRoots):
-        var = i + noRoots
-        naiveBayes.append(CPT(theData, var, 0, noStates))
-    return array(naiveBayes)
 
 #
 # main program part for Coursework 4
@@ -368,20 +359,10 @@ AppendList("IDAPIResults04.txt", meanVector)
 AppendString("IDAPIResults04.txt","3 - The covariance matrix of the Hepatitis C data set")
 covar = Covariance(theData)
 AppendArray("IDAPIResults04.txt", covar)
+eigenfaces = ReadEigenfaceBasis()
+CreateEigenfaceFiles(eigenfaces)
+AppendString("IDAPIResults04.txt","4 - The component magnitudes for image “c.pgm” in the principal component basis used in task 4")
+meanVector = array(ReadOneImage("MeanImage.jpg"))
+projectedFace = ProjectFace(eigenfaces, meanVector, "c.pgm")
+AppendList("IDAPIResults04.txt", projectedFace)
 
-# AppendArray("IDAPIResults02.txt", depMatrix)
-# arcList, cptList = HepatitisCNetwork(theData, noStates)
-# mdlSize = MDLSize(arcList, cptList, noDataPoints, noStates)
-# AppendString("IDAPIResults03.txt","2 - The MDLSize of the network for Hepatitis C data set: %f" % mdlSize)
-# mdlAccuracy = MDLAccuracy(theData, arcList, cptList)
-# AppendString("IDAPIResults03.txt","3 - The MDLAccuracy of the network for Hepatitis C data set: %f" % mdlAccuracy)
-# mdlScore = MDLScore(theData, arcList, cptList, noDataPoints, noStates)
-# AppendString("IDAPIResults03.txt","4 - The MDLScore of the network for Hepatitis C data set: %f" % mdlScore)
-# bestNetwork, bestNetworkScore = BestNetworkScoreRemovingOneArc(theData, arcList, cptList, noDataPoints, noStates)
-# AppendString("IDAPIResults03.txt","5 - The score of the best network with one arc removed: %f" % bestNetworkScore)
-# AppendString("IDAPIResults03.txt","5 - The best network with one arc removed %s" % bestNetwork)
-
-
-# 2. The mean vector Hepatitis C data set
-# 3. The covariance matrix of the Hepatitis C data set
-# 4. The component magnitudes for image “c.pgm” in the principal component basis used in task 4.
