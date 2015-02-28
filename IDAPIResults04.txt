@@ -14,6 +14,6 @@
 -0.067 -0.032 -0.005  0.047 -0.001 -0.141  0.014  0.119  0.170 
 
 
-4 - The component magnitudes for image “c.pgm” in the principal component basis used in task 4
+4 - The component magnitudes for image “c.pgm” in the principal component basis
 1206.254 -1590.133 -248.136 -821.249 246.009 -771.900 963.633 376.967 161.599 -533.276 
 
